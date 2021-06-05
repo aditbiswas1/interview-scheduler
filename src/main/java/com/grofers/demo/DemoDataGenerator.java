@@ -42,8 +42,9 @@ public class DemoDataGenerator {
 
         List<Interviewer> interviewers = new ArrayList<>(10);
 
-        Interviewer adit = new Interviewer("Adit");
-        Interviewer aI = new Interviewer("a");
+        Interviewer adit = new Interviewer("AAA");
+        Interviewer aI = new Interviewer("BBB");
+        Interviewer bI = new Interviewer("CCC");
         List<Skill> aditSkills = new ArrayList<>();
         aditSkills.add(skills.get(0));
         adit.setSkillSet(aditSkills);
@@ -51,10 +52,12 @@ public class DemoDataGenerator {
         List<Skill> aSkill = new ArrayList<>();
         aSkill.add(skills.get(1));
         aI.setSkillSet(aSkill);
+        bI.setSkillSet(aditSkills);
 
 
         interviewers.add(adit);
         interviewers.add(aI);
+        interviewers.add(bI);
 
         interviewerRepository.persist(interviewers);
 
@@ -66,6 +69,7 @@ public class DemoDataGenerator {
         candidates.add(new Candidate("a", aditSkills));
         candidates.add(new Candidate("b", aSkill));
         candidates.add(new Candidate("c", aditSkills));
+
 
         candidateRepository.persist(candidates);
 

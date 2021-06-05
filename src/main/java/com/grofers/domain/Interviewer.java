@@ -12,7 +12,7 @@ import java.util.Set;
 public class Interviewer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @PlanningId
     private Long id;
 
