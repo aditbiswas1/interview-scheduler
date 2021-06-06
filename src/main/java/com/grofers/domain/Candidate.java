@@ -2,6 +2,7 @@ package com.grofers.domain;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 import org.optaplanner.core.api.domain.lookup.PlanningId;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
@@ -24,10 +25,20 @@ public class Candidate {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Skill> skillList;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Slot> preferredSlots;
+
+    @PlanningVariable(valueRangeProviderRefs = "slotsRange")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.JOIN)
+    private Slot finalSlot;
+
     @PlanningVariable(valueRangeProviderRefs = "interviewerRange")
     @ManyToOne(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.JOIN)
     private Interviewer interviewer;
+
 
     public Candidate() {
     }
@@ -85,6 +96,17 @@ public class Candidate {
         return count;
     }
 
+    public int getAgreeAbleSlot(){
+        if (finalSlot == null || interviewer == null){
+            return 1;
+        }
+
+        if (preferredSlots.contains(finalSlot) && interviewer.getPreferredSlots().contains(finalSlot)){
+            return 0;
+        }
+        return 1;
+    }
+
     @Override
     public String toString() {
         return "Candidate{" +
@@ -93,5 +115,21 @@ public class Candidate {
                 ", skillList=" + skillList +
                 ", interviewer=" + interviewer +
                 '}';
+    }
+
+    public List<Slot> getPreferredSlots() {
+        return preferredSlots;
+    }
+
+    public void setPreferredSlots(List<Slot> preferredSlots) {
+        this.preferredSlots = preferredSlots;
+    }
+
+    public Slot getFinalSlot() {
+        return finalSlot;
+    }
+
+    public void setFinalSlot(Slot finalSlot) {
+        this.finalSlot = finalSlot;
     }
 }

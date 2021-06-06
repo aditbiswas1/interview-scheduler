@@ -16,8 +16,14 @@ public class Schedule {
     @ValueRangeProvider(id="interviewerRange")
     private List<Interviewer> interviewers;
 
+    @ProblemFactCollectionProperty
+    @ValueRangeProvider(id="slotsRange")
+    private List<Slot> slots;
+
     @PlanningEntityCollectionProperty
     private List<Candidate> candidates;
+
+
 
     @PlanningScore
     private HardSoftScore score;
@@ -25,8 +31,9 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(List<Interviewer> interviewers, List<Candidate> candidates) {
+    public Schedule(List<Interviewer> interviewers, List<Slot> slots, List<Candidate> candidates) {
         this.interviewers = interviewers;
+        this.slots = slots;
         this.candidates = candidates;
     }
 
@@ -36,6 +43,10 @@ public class Schedule {
 
     public List<Candidate> getCandidates() {
         return candidates;
+    }
+
+    public List<Slot> getSlots() {
+        return slots;
     }
 
     public HardSoftScore getScore() {

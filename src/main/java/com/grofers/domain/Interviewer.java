@@ -22,6 +22,10 @@ public class Interviewer {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Skill> skillSet;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private List<Slot> preferredSlots;
+
     public Interviewer() {
     }
 
@@ -60,5 +64,13 @@ public class Interviewer {
                 ", name='" + name + '\'' +
                 ", skillSet=" + skillSet +
                 '}';
+    }
+
+    public List<Slot> getPreferredSlots() {
+        return preferredSlots;
+    }
+
+    public void setPreferredSlots(List<Slot> preferredSlots) {
+        this.preferredSlots = preferredSlots;
     }
 }

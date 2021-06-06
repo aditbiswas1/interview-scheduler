@@ -13,7 +13,8 @@ public class ScheduleConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[]{
                 noMissingSkill(constraintFactory),
-                oneCandidatePerInterviwer(constraintFactory)
+                oneCandidatePerInterviwer(constraintFactory),
+                matchingSlotPreference(constraintFactory)
         };
     }
 
@@ -31,7 +32,16 @@ public class ScheduleConstraintProvider implements ConstraintProvider {
         return constraintFactory
                 .fromUniquePair(Candidate.class,
                                 Joiners.equal(Candidate::getInterviewer))
-                .penalize("Max 1 Candidate Perr Interviwer",
+                .penalize("Max 1 Candidate Per Interviwer",
                         HardSoftScore.ONE_HARD);
+    }
+
+    Constraint matchingSlotPreference(ConstraintFactory constraintFactory){
+        return constraintFactory
+                .from(Candidate.class)
+                .filter(candidate -> candidate.getAgreeAbleSlot() != 0)
+                .penalize("Preferred Slot Match",
+                        HardSoftScore.ONE_HARD);
+
     }
 }

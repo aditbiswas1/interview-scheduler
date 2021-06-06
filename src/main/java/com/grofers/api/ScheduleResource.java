@@ -5,6 +5,9 @@ import com.grofers.domain.Interviewer;
 import com.grofers.domain.Schedule;
 import com.grofers.repository.CandidateRepository;
 import com.grofers.repository.InterviewerRepository;
+import com.grofers.repository.SlotRepository;
+import org.optaplanner.core.api.score.ScoreManager;
+import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.SolverManager;
 
 import javax.inject.Inject;
@@ -26,13 +29,21 @@ public class ScheduleResource {
     InterviewerRepository interviewerRepository;
 
     @Inject
+    SlotRepository slotRepository;
+
+    @Inject
     SolverManager <Schedule, Long> solverManager;
+
+    @Inject
+    ScoreManager <Schedule, HardSoftScore> scoreManager;
 
 
 
     @GET
     public Schedule getSchedule(){
         Schedule solution = findById(SINGLETON_SCHEDULE_ID);
+        scoreManager.updateScore(solution);
+        System.out.println(scoreManager.explainScore(solution));
         return solution;
     }
 
@@ -46,6 +57,7 @@ public class ScheduleResource {
     protected Schedule findById(Long id){
         return new Schedule(
                 interviewerRepository.listAll(),
+                slotRepository.listAll(),
                 candidateRepository.listAll()
         );
     }
@@ -56,6 +68,7 @@ public class ScheduleResource {
         for (Candidate candidate : schedule.getCandidates()){
             Interviewer x = candidate.getInterviewer();
             Candidate attachedCandidate = candidateRepository.findById(candidate.getId());
+            attachedCandidate.setFinalSlot(candidate.getFinalSlot());
             attachedCandidate.setInterviewer(candidate.getInterviewer());
         }
     }
