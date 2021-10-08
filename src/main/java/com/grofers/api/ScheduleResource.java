@@ -9,6 +9,7 @@ import com.grofers.repository.SlotRepository;
 import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.SolverManager;
+import org.optaplanner.core.api.solver.SolverStatus;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -41,9 +42,11 @@ public class ScheduleResource {
 
     @GET
     public Schedule getSchedule(){
+        SolverStatus solverStatus = getSolverStatus();
         Schedule solution = findById(SINGLETON_SCHEDULE_ID);
         scoreManager.updateScore(solution);
         System.out.println(scoreManager.explainScore(solution));
+        solution.setSolverStatus(solverStatus);
         return solution;
     }
 
@@ -60,6 +63,10 @@ public class ScheduleResource {
                 slotRepository.listAll(),
                 candidateRepository.listAll()
         );
+    }
+
+    public SolverStatus getSolverStatus() {
+        return solverManager.getSolverStatus(SINGLETON_SCHEDULE_ID);
     }
 
     @Transactional

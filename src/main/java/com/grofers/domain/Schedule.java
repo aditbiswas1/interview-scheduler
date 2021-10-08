@@ -6,6 +6,7 @@ import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
+import org.optaplanner.core.api.solver.SolverStatus;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class Schedule {
 
     @PlanningScore
     private HardSoftScore score;
+
+    private SolverStatus solverStatus;
 
     public Schedule() {
     }
@@ -51,6 +54,14 @@ public class Schedule {
 
     public HardSoftScore getScore() {
         return score;
+    }
+
+    public SolverStatus getSolverStatus() {
+        return solverStatus;
+    }
+
+    public void setSolverStatus(SolverStatus solverStatus) {
+        this.solverStatus = solverStatus;
     }
 
     @Override
